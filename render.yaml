@@ -1,0 +1,37 @@
+services:
+  - type: web
+    name: state-ledger
+    env: python
+    repo: https://github.com/Gavinles/fdcn-cloud-genesis.git
+    rootDir: services/state-ledger
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn -w 1 --bind 0.0.0.0:10000 app:app"
+  - type: web
+    name: aether-weaver
+    env: python
+    repo: https://github.com/Gavinles/fdcn-cloud-genesis.git
+    rootDir: services/aether-weaver
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn -w 1 --bind 0.0.0.0:10000 app:app"
+  - type: web
+    name: oracle-ai
+    env: python
+    repo: https://github.com/Gavinles/fdcn-cloud-genesis.git
+    rootDir: services/oracle-ai
+    buildCommand: "pip install -r requirements.txt && python -c 'import nltk; nltk.download(\"vader_lexicon\")'"
+    startCommand: "gunicorn -w 1 --bind 0.0.0.0:10000 app:app"
+    envVars:
+      - key: STATE_LEDGER_URL
+        fromService: { type: web, name: state-ledger, property: url }
+      - key: AETHER_WEAVER_URL
+        fromService: { type: web, name: aether-weaver, property: url }
+  - type: web
+    name: portal
+    env: node
+    repo: https://github.com/Gavinles/fdcn-cloud-genesis.git
+    rootDir: portal-webapp
+    buildCommand: "npm install && npm run build"
+    startCommand: "npm start"
+    envVars:
+      - key: NEXT_PUBLIC_API_BASE_URL
+        fromService: { type: web, name: oracle-ai, property: url }
