@@ -4,8 +4,11 @@ try:nltk.data.find('sentiment/vader_lexicon.zip')
 except:nltk.download('vader_lexicon',quiet=True)
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 analyzer=SentimentIntensityAnalyzer()
-STATE_LEDGER_URL=os.environ.get('STATE_LEDGER_URL')
-AETHER_WEAVER_URL=os.environ.get('AETHER_WEAVER_URL')
+
+# Correctly construct the full URL from the 'hostport' environment variable
+STATE_LEDGER_URL = f"http://{os.environ.get('STATE_LEDGER_URL')}"
+AETHER_WEAVER_URL = f"http://{os.environ.get('AETHER_WEAVER_URL')}"
+
 def get_guidance(text):
     if any(w in text.lower() for w in ["love","grateful"]): return "High coherence insight detected. The network resonates with this."
     return "Insight anchored. What is the feeling behind this thought?"
@@ -22,5 +25,4 @@ def analyze():
     except: return jsonify({"error":"backend service unavailable"}),500
     return jsonify({"guidance":get_guidance(text)})
 @app.route('/')
-def health(): return jsonify({"status":"online - Oracle AI"})
-if __name__=='__main__': app.run(host='0.0.0.0',port=10000)
+def health(): return jsonify({"status":"online"})
