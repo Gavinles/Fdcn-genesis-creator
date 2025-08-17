@@ -7,9 +7,8 @@ services:
     rootDir: services/state-ledger
     buildCommand: "pip install -r requirements.txt"
     startCommand: "gunicorn -w 1 --bind 0.0.0.0:10000 app:app"
-    healthCheck:
-      path: /
-
+    healthCheckPath: /
+      
   # 2. The Aether Weaver (Sonic Engine)
   - type: web
     name: aether-weaver
@@ -18,8 +17,7 @@ services:
     rootDir: services/aether-weaver
     buildCommand: "pip install -r requirements.txt"
     startCommand: "gunicorn -w 1 --bind 0.0.0.0:10000 app:app"
-    healthCheck:
-      path: /
+    healthCheckPath: /
 
   # 3. The Oracle AI (ULM-CC)
   - type: web
@@ -29,8 +27,7 @@ services:
     rootDir: services/oracle-ai
     buildCommand: "pip install -r requirements.txt && python -c 'import nltk; nltk.download(\"vader_lexicon\")'"
     startCommand: "gunicorn -w 1 --bind 0.0.0.0:10000 app:app"
-    healthCheck:
-      path: /
+    healthCheckPath: /
     envVars:
       - key: STATE_LEDGER_URL
         fromService:
