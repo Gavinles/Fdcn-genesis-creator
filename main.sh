@@ -1,4 +1,6 @@
-echo Hello World!{
+echo Hello World!echo Hello World!{
+  "action": "acknowledged",
+  # ... lots of JSON content{
   "action": "acknowledged",
   "analysis": {
     "core_constraint": "User does not have any of the previously generated code saved.",
