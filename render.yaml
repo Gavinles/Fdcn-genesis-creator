@@ -9,7 +9,7 @@ services:
     startCommand: "gunicorn -w 1 --bind 0.0.0.0:10000 app:app"
     healthCheck:
       path: /
-      
+
   # 2. The Aether Weaver (Sonic Engine)
   - type: web
     name: aether-weaver
@@ -36,12 +36,12 @@ services:
         fromService:
           type: web
           name: state-ledger
-          property: hostport # Corrected from 'url'
+          property: hostport
       - key: AETHER_WEAVER_URL
         fromService:
           type: web
           name: aether-weaver
-          property: hostport # Corrected from 'url'
+          property: hostport
 
   # 4. The Portal (VAOS Web App)
   - type: web
@@ -56,4 +56,4 @@ services:
         fromService:
           type: web
           name: oracle-ai
-          property: hostport # Corrected from 'url'
+          property: hostport
