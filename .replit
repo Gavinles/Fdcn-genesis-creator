@@ -7,3 +7,15 @@ channel = "stable-24_05"
 [deployment]
 run = ["bash", "main.sh"]
 deploymentTarget = "cloudrun"
+
+[workflows]
+runButton = "VADER Sentiment Analysis"
+
+[[workflows.workflow]]
+name = "VADER Sentiment Analysis"
+author = 46529999
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "bash main.sh"
