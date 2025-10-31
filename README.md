@@ -15,6 +15,8 @@ Mindpath is a full-stack application consisting of:
 
 ## Quick Start
 
+**⚡ In a hurry?** See [QUICKSTART.md](./QUICKSTART.md) for a 5-minute setup guide.
+
 ### Prerequisites
 
 - Docker and Docker Compose installed (for local deployment)
@@ -63,6 +65,105 @@ For production deployment to Vercel (frontend) and Render.com (backend):
 3. **Or follow the detailed guide**: See [MINDPATH-VERCEL-DEPLOYMENT.md](./MINDPATH-VERCEL-DEPLOYMENT.md) for comprehensive deployment instructions.
 
 **Important**: The backend requires WebSocket support and cannot be deployed to Vercel. Deploy it to Render.com, Railway.app, or similar platforms that support persistent connections.
+
+### Option 3: Manual Service Startup (Advanced)
+
+For development or debugging, you can run the backend and frontend services separately:
+
+**Step 1: Generate the application structure**
+```bash
+./mindpath-genesis.sh
+```
+
+**Step 2: Start the Backend Service**
+```bash
+cd backend
+
+# Create and activate virtual environment (first time only)
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Start the backend server
+python src/app.py
+```
+
+The backend will start on `http://localhost:5008`
+
+**Step 3: Start the Frontend Service (in a new terminal)**
+```bash
+cd frontend
+
+# Install dependencies (first time only)
+npm install
+
+# Start the development server
+npm run dev
+```
+
+The frontend will start on `http://localhost:3000`
+
+**Step 4: Access the Application**
+
+Open your browser to `http://localhost:3000` and click "Begin Your Journey"
+
+#### Environment Variables for Manual Setup
+
+**Backend**: No environment variables required for local development.
+
+**Frontend**: Create a `.env.local` file in the `frontend/` directory (optional, defaults work for local):
+```bash
+NEXT_PUBLIC_BACKEND_URL=http://localhost:5008
+```
+
+## Local Test Network & Verification
+
+### Automated Testing
+
+To verify the entire system works correctly, run the automated test script:
+
+```bash
+./test-genesis.sh
+```
+
+This comprehensive test script will:
+- ✅ Run the genesis script in a temporary directory
+- ✅ Verify all expected files and directories are created
+- ✅ Check Python syntax in backend files
+- ✅ Validate JSON syntax in frontend files
+- ✅ Verify critical backend functionality (socket events, sentiment analysis)
+- ✅ Validate frontend configuration (environment variables, components)
+- ✅ Clean up automatically after testing
+
+The test passes if all checks succeed and returns exit code 0.
+
+### Manual Verification Steps
+
+After running `./mindpath-genesis.sh`, you can manually verify the deployment:
+
+1. **Check Directory Structure**:
+   ```bash
+   ls -la backend/ frontend/ docker-compose.yml
+   ```
+
+2. **Verify Backend Files**:
+   ```bash
+   python3 -m py_compile backend/src/app.py
+   cat backend/requirements.txt
+   ```
+
+3. **Verify Frontend Files**:
+   ```bash
+   node -e "JSON.parse(require('fs').readFileSync('frontend/package.json'))"
+   cat frontend/src/pages/index.js
+   ```
+
+4. **Test Docker Compose Configuration**:
+   ```bash
+   docker compose config
+   ```
 
 ## What the Script Creates
 
@@ -183,6 +284,54 @@ This will:
 - Check Python syntax and JSON validity
 - Validate critical functionality (socket events, environment variables)
 - Clean up automatically
+
+## Troubleshooting
+
+### Common Issues and Solutions
+
+**Docker Compose Not Found**
+```bash
+# Use modern Docker syntax (v2.0+)
+docker compose up --build
+
+# Or install docker-compose for older versions
+pip install docker-compose
+```
+
+**Port Already in Use**
+```bash
+# Find and kill process using the port
+lsof -i :3000  # or :5008 for backend
+kill -9 <PID>
+```
+
+**Backend Module Not Found**
+```bash
+# Activate virtual environment and reinstall
+cd backend
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+**Frontend Can't Connect to Backend**
+- Ensure backend is running on port 5008
+- Check `NEXT_PUBLIC_BACKEND_URL` is set correctly
+- For Docker: use `http://backend:5008`
+- For local dev: use `http://localhost:5008`
+
+**NLTK Data Not Found**
+The backend automatically downloads VADER lexicon on first run. If it fails:
+```bash
+python3 -c "import nltk; nltk.download('vader_lexicon')"
+```
+
+**Genesis Script Permission Denied**
+```bash
+chmod +x mindpath-genesis.sh test-genesis.sh
+./mindpath-genesis.sh
+```
+
+For more detailed troubleshooting, see [USAGE.md](./USAGE.md#troubleshooting).
 
 ## Security Considerations
 

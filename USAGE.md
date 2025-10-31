@@ -102,36 +102,155 @@ The co-pilot provides three types of responses based on sentiment analysis:
 
 ## Development
 
-### Running Services Separately
+### Running Services Separately (Manual Startup)
 
-**Backend Only**
+For advanced users who want more control over the development environment, you can run the backend and frontend services separately. This is useful for debugging, development, or when you don't want to use Docker.
+
+#### Prerequisites
+
+Before starting, ensure you have:
+- **Python 3.9+** installed (`python3 --version`)
+- **pip** package manager (`pip3 --version`)
+- **Node.js 18+** installed (`node --version`)
+- **npm** package manager (`npm --version`)
+
+#### Step-by-Step Manual Setup
+
+**Step 1: Generate the Application Structure**
+
+First, run the genesis script to create the complete application:
+```bash
+./mindpath-genesis.sh
+```
+
+**Step 2: Start the Backend Service**
+
+Open a terminal and navigate to the backend directory:
 ```bash
 cd backend
-source venv/bin/activate  # First time: python3 -m venv venv
+```
+
+Create a virtual environment (first time only):
+```bash
+python3 -m venv venv
+```
+
+Activate the virtual environment:
+```bash
+# On Linux/macOS:
+source venv/bin/activate
+
+# On Windows:
+venv\Scripts\activate
+
+# You should see (venv) in your terminal prompt
+```
+
+Install Python dependencies:
+```bash
 pip install -r requirements.txt
+```
+
+Start the backend server:
+```bash
 python src/app.py
 ```
-Backend runs on: http://localhost:5008
 
-**Frontend Only**
+You should see:
+```
+>>> Mindpath Backend (Oracle + Ledger): ONLINE <<<
+```
+
+Backend runs on: **http://localhost:5008**
+
+**Step 3: Start the Frontend Service (New Terminal)**
+
+Open a **new terminal window** and navigate to the frontend directory:
 ```bash
 cd frontend
+```
+
+Install Node.js dependencies (first time only):
+```bash
 npm install
+```
+
+Start the development server:
+```bash
 npm run dev
 ```
-Frontend runs on: http://localhost:3000
+
+You should see:
+```
+ready - started server on 0.0.0.0:3000, url: http://localhost:3000
+```
+
+Frontend runs on: **http://localhost:3000**
+
+**Step 4: Access the Application**
+
+Open your web browser and navigate to:
+```
+http://localhost:3000
+```
+
+Click "Begin Your Journey" to start using Mindpath!
+
+#### Environment Variables for Manual Setup
+
+**Backend Environment Variables**
+
+The backend works with default settings for local development. No environment variables are required.
+
+If you need to customize, you can set:
+- `PORT`: Server port (default: 5008)
+- `HOST`: Server host (default: 0.0.0.0)
+
+Example:
+```bash
+export PORT=5009
+python src/app.py
+```
+
+**Frontend Environment Variables**
+
+Create a `.env.local` file in the `frontend/` directory to configure the backend URL:
+
+```bash
+# frontend/.env.local
+NEXT_PUBLIC_BACKEND_URL=http://localhost:5008
+```
+
+If not set, the frontend defaults to `http://localhost:5008` which works for local development.
+
+For production or custom backends:
+```bash
+# Example for production backend
+NEXT_PUBLIC_BACKEND_URL=https://your-backend-url.com
+```
+
+#### Stopping the Services
+
+**To stop the backend**:
+1. Press `Ctrl+C` in the backend terminal
+2. Deactivate the virtual environment: `deactivate`
+
+**To stop the frontend**:
+1. Press `Ctrl+C` in the frontend terminal
 
 ### Configuration
 
-**Backend**
-- Port: 5008 (configurable in `backend/src/app.py`)
-- CORS: Allows all origins (adjust for production)
-- Database: In-memory (extend for persistence)
+**Backend Configuration**
+- Port: 5008 (change in `backend/src/app.py` line 90)
+- CORS: Allows all origins (`*`) - adjust for production
+- Database: In-memory (extend for persistence in `backend/src/app.py`)
+- WebSocket: Socket.IO with CORS enabled
 
-**Frontend**
-- Port: 3000 (configurable in `frontend/package.json`)
+**Frontend Configuration**
+- Port: 3000 (change in `frontend/package.json` scripts section)
 - Backend URL: Set via `NEXT_PUBLIC_BACKEND_URL` environment variable
 - Defaults to `http://localhost:5008` for local development
+- Build output: `.next/` directory (gitignored)
 
 ### Extending the Application
 
@@ -176,9 +295,41 @@ Modify the `get_co_pilot_guidance()` function in `backend/src/app.py` to adjust 
 ### Docker Build Fails
 - **Issue**: Network timeout or build errors
 - **Solution**: 
-  1. Check Docker daemon is running
+  1. Check Docker daemon is running: `docker ps`
   2. Increase Docker build timeout
   3. Verify internet connectivity for package downloads
+  4. Try using `--no-cache` flag: `docker compose build --no-cache`
+  5. Check Docker logs: `docker compose logs`
+
+### Docker Compose Command Not Found
+- **Issue**: `docker-compose: command not found`
+- **Solution**: 
+  1. For Docker v2.0+, use: `docker compose` (without hyphen)
+  2. For older Docker, install docker-compose: `pip install docker-compose`
+  3. Or upgrade Docker to latest version
+
+### Port Already in Use
+- **Issue**: "Port 3000/5008 is already allocated"
+- **Solution**:
+  1. Stop conflicting services using the port
+  2. Find process: `lsof -i :3000` or `lsof -i :5008`
+  3. Kill process: `kill -9 <PID>`
+  4. Or change port in `docker-compose.yml` or service configuration
+
+### Genesis Script Fails
+- **Issue**: Permission denied or script errors
+- **Solution**:
+  1. Make script executable: `chmod +x mindpath-genesis.sh`
+  2. Run with bash explicitly: `bash mindpath-genesis.sh`
+  3. Check you have write permissions in current directory
+  4. Ensure Python 3.9+ and Node.js 18+ are installed
+
+### Virtual Environment Activation Fails
+- **Issue**: Cannot activate venv on Windows
+- **Solution**:
+  1. Use: `venv\Scripts\activate` (backslashes on Windows)
+  2. Or use PowerShell: `venv\Scripts\Activate.ps1`
+  3. If execution policy error: `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`
 
 ### NLTK Data Not Found
 - **Issue**: "VADER lexicon not found"
