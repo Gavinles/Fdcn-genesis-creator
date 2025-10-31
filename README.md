@@ -119,6 +119,21 @@ The frontend will be available at `http://localhost:3000`
 - **Communication**: WebSocket for real-time bidirectional communication
 - **Data**: In-memory store (extendable to persistent database)
 
+## Testing
+
+To verify the genesis script works correctly:
+
+```bash
+./test-genesis.sh
+```
+
+This will:
+- Run the genesis script in a temporary directory
+- Verify all files are created correctly
+- Check Python syntax and JSON validity
+- Validate critical functionality (socket events, environment variables)
+- Clean up automatically
+
 ## The Vision
 
 Mindpath is the first light of a new world where individuals take ownership of their mental health through technology that listens, understands, and supports without judgment. This is not just code—it's a living artifact designed to help humanity heal.
