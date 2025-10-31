@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Editor from 'react-simple-code-editor';
 import { highlight, languages } from 'prismjs';
 import 'prismjs/components/prism-javascript';
@@ -29,6 +29,15 @@ const CodeEditorUI: React.FC<CodeEditorUIProps> = ({
 }) => {
   const [code, setCode] = useState(initialCode);
   const [language, setLanguage] = useState<Language>(initialLanguage);
+
+  // Sync local state with prop changes
+  useEffect(() => {
+    setCode(initialCode);
+  }, [initialCode]);
+
+  useEffect(() => {
+    setLanguage(initialLanguage);
+  }, [initialLanguage]);
 
   const handleCodeChange = (newCode: string) => {
     setCode(newCode);
