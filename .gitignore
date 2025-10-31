@@ -35,6 +35,7 @@ out/
 .cache/
 package-lock.json
 yarn.lock
+next-env.d.ts
 
 # IDEs
 .vscode/
