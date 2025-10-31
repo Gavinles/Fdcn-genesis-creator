@@ -17,11 +17,13 @@ Mindpath is a full-stack application consisting of:
 
 ### Prerequisites
 
-- Docker and Docker Compose installed
+- Docker and Docker Compose installed (for local deployment)
 - Python 3.9+ (for development)
 - Node.js 18+ (for development)
+- Vercel account (for Vercel deployment)
+- Render.com or Railway account (for backend hosting)
 
-### Deploy the Complete Application
+### Option 1: Local Deployment with Docker
 
 1. **Run the genesis script** to create the entire application structure:
    ```bash
@@ -43,6 +45,24 @@ Mindpath is a full-stack application consisting of:
    ```
 
 That's it! The Mindpath portal will greet you with a login screen. Click "Begin Your Journey" to start.
+
+### Option 2: Cloud Deployment with Vercel
+
+For production deployment to Vercel (frontend) and Render.com (backend):
+
+1. **Run the genesis script** to create the application structure:
+   ```bash
+   ./mindpath-genesis.sh
+   ```
+
+2. **Deploy using the helper script**:
+   ```bash
+   ./deploy-mindpath-vercel.sh
+   ```
+
+3. **Or follow the detailed guide**: See [MINDPATH-VERCEL-DEPLOYMENT.md](./MINDPATH-VERCEL-DEPLOYMENT.md) for comprehensive deployment instructions.
+
+**Important**: The backend requires WebSocket support and cannot be deployed to Vercel. Deploy it to Render.com, Railway.app, or similar platforms that support persistent connections.
 
 ## What the Script Creates
 
@@ -118,6 +138,36 @@ The frontend will be available at `http://localhost:3000`
 - **Frontend**: Next.js 13 + React 18 + Socket.IO Client
 - **Communication**: WebSocket for real-time bidirectional communication
 - **Data**: In-memory store (extendable to persistent database)
+
+## Deployment
+
+### Cloud Deployment Options
+
+Mindpath can be deployed to various cloud platforms. See [MINDPATH-VERCEL-DEPLOYMENT.md](./MINDPATH-VERCEL-DEPLOYMENT.md) for detailed instructions.
+
+#### Supported Platforms
+
+- **Frontend**: Vercel, Netlify, Render.com, Railway.app
+- **Backend**: Render.com, Railway.app, Heroku, DigitalOcean (requires WebSocket support)
+
+#### Quick Deployment Guide
+
+1. **Backend** (must support WebSockets):
+   - Use `render-mindpath.yaml` for Render.com
+   - Or deploy to Railway.app
+   - Copy the deployed backend URL
+
+2. **Frontend**:
+   - Set environment variable: `NEXT_PUBLIC_BACKEND_URL=<your-backend-url>`
+   - Deploy to Vercel using `vercel.json` configuration
+   - Or use the helper script: `./deploy-mindpath-vercel.sh`
+
+3. **Update CORS**:
+   - Configure backend to allow your frontend domain
+   - Update `backend/src/app.py` CORS settings
+   - Redeploy backend
+
+See the full deployment guide for step-by-step instructions.
 
 ## Testing
 

@@ -1,0 +1,20 @@
+{
+  "version": 2,
+  "name": "mindpath-genesis",
+  "buildCommand": "cd frontend && npm install && npm run build",
+  "outputDirectory": "frontend/.next",
+  "installCommand": "cd frontend && npm install",
+  "framework": "nextjs",
+  "github": {
+    "enabled": true,
+    "autoAlias": true
+  },
+  "env": {
+    "NEXT_PUBLIC_BACKEND_URL": "@mindpath-backend-url"
+  },
+  "build": {
+    "env": {
+      "NEXT_PUBLIC_BACKEND_URL": "@mindpath-backend-url"
+    }
+  }
+}

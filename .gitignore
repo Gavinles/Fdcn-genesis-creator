@@ -56,8 +56,25 @@ nltk_data/
 
 # Generated directories by the script
 backend/
-frontend/
 docker-compose.yml
+
+# Frontend is now committed for Vercel deployment
+# but exclude build artifacts and dependencies
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/venv/
+
+# Vercel
+.vercel
+*.vercel.json.backup
+
+# Environment files (keep .example files)
+.env
+.env.local
+.env.*.local
+!.env.example
+!*.env.example
 
 # Temporary files
 tmp/
