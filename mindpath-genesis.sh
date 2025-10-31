@@ -62,7 +62,7 @@ def on_join(data):
     print(f"Client for {account_id} connected and joined sovereign room.")
     emit('state_update', DB['accounts'].get(account_id, {}), room=account_id)
 
-@socketio.on('submit_pocc')
+@socketio.on('pocc')
 def handle_pocc(data):
     account_id = data.get('accountId')
     text = data.get('text', '')
@@ -124,7 +124,7 @@ import Head from 'next/head';
 import CoPilot from '../components/CoPilot';
 import { io } from "socket.io-client";
 
-const BACKEND_URL = 'http://localhost:5008';
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:5008';
 
 export default function Home() {
     const [account, setAccount] = useState(null);
