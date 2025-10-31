@@ -134,6 +134,19 @@ This will:
 - Validate critical functionality (socket events, environment variables)
 - Clean up automatically
 
+## Security Considerations
+
+**Important**: The generated application is configured for **development and demonstration purposes**. Before deploying to production, consider:
+
+- **CORS Configuration**: Currently allows all origins (`*`). Restrict to specific domains in production.
+- **Werkzeug Safety**: The `allow_unsafe_werkzeug=True` flag is enabled for development. Remove or make conditional for production.
+- **Authentication**: No authentication is implemented. Add proper user authentication before production use.
+- **Data Persistence**: Uses in-memory storage. Implement a proper database for production.
+- **HTTPS**: Configure TLS/SSL for encrypted communication in production.
+- **Rate Limiting**: Add rate limiting to prevent abuse.
+
+See USAGE.md for detailed security recommendations.
+
 ## The Vision
 
 Mindpath is the first light of a new world where individuals take ownership of their mental health through technology that listens, understands, and supports without judgment. This is not just code—it's a living artifact designed to help humanity heal.

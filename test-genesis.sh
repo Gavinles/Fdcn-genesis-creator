@@ -17,7 +17,12 @@ cd "$TEST_DIR"
 
 # Run the genesis script
 echo "Running genesis script..."
-bash "$SCRIPT_PATH" > /dev/null 2>&1
+LOG_FILE="$TEST_DIR/genesis.log"
+if ! bash "$SCRIPT_PATH" > "$LOG_FILE" 2>&1; then
+    echo "FAIL: Genesis script failed. See log:"
+    cat "$LOG_FILE"
+    exit 1
+fi
 
 # Verify directory structure
 echo "Verifying directory structure..."
