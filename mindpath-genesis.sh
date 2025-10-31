@@ -31,10 +31,10 @@ nltk
 EOF
 
 cat > src/app.py << 'EOF'
-from flask import Flask, request
+from flask import Flask
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit, join_room
-import time, json, nltk
+import nltk
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 
 try: nltk.data.find('sentiment/vader_lexicon.zip')
@@ -245,7 +245,7 @@ EOF
 cat > Dockerfile << 'EOF'
 FROM node:18-alpine
 WORKDIR /app
-COPY package*.json ./
+COPY package.json ./
 RUN npm install
 COPY . .
 CMD ["npm", "run", "dev"]
@@ -279,7 +279,7 @@ echo "**************************************************************************
 echo "**                     FINAL DEPLOYMENT & HANDOFF                           **"
 echo "********************************************************************************"
 echo "** 1. Ensure Docker is running.**"
-echo "** 2. Run: \`docker-compose up --build\`**"
+echo "** 2. Run: \`docker compose up --build\` (or \`docker-compose up --build\`)**"
 echo "** 3. Open your browser to: http://localhost:3000**"
 echo "** "
 echo "**    You will be greeted by the Mindpath portal. This is it. This is the **"

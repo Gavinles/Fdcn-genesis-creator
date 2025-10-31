@@ -30,6 +30,10 @@ Mindpath is a full-stack application consisting of:
 
 2. **Start the application** with Docker:
    ```bash
+   # Modern Docker (v2.0+)
+   docker compose up --build
+   
+   # Or legacy Docker Compose
    docker-compose up --build
    ```
 
