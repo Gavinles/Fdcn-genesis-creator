@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "name": "mindpath-frontend",
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "outputDirectory": ".next",
+  "github": {
+    "enabled": true,
+    "autoAlias": true
+  },
+  "env": {
+    "NEXT_PUBLIC_BACKEND_URL": "@mindpath-backend-url"
+  },
+  "build": {
+    "env": {
+      "NEXT_PUBLIC_BACKEND_URL": "@mindpath-backend-url"
+    }
+  }
+}

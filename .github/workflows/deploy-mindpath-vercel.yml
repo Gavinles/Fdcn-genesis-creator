@@ -1,0 +1,65 @@
+name: Deploy Mindpath to Vercel
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'frontend/**'
+      - 'vercel.json'
+      - '.github/workflows/deploy-mindpath-vercel.yml'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Check if Mindpath exists
+        id: check_mindpath
+        run: |
+          if [ -d "frontend" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Generate Mindpath application
+        if: steps.check_mindpath.outputs.exists == 'false'
+        run: |
+          chmod +x mindpath-genesis.sh
+          ./mindpath-genesis.sh
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
+      - name: Pull Vercel Environment Information
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: ./frontend
+
+      - name: Build Project Artifacts
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: ./frontend
+        env:
+          NEXT_PUBLIC_BACKEND_URL: ${{ secrets.MINDPATH_BACKEND_URL }}
+
+      - name: Deploy Project Artifacts to Vercel
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: ./frontend
+
+      - name: Deployment Summary
+        run: |
+          echo "✅ Mindpath frontend deployed to Vercel!"
+          echo ""
+          echo "⚠️ Remember to:"
+          echo "1. Deploy backend to Render.com or Railway.app"
+          echo "2. Set MINDPATH_BACKEND_URL secret in GitHub"
+          echo "3. Update backend CORS settings with Vercel domain"

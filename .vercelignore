@@ -1,0 +1,53 @@
+# Vercel ignore file for Mindpath deployment
+# Only deploy the frontend directory to Vercel
+
+# Ignore backend directory
+backend/
+backend/**
+
+# Ignore other services
+services/
+services/**
+
+# Ignore Docker files
+docker-compose.yml
+Dockerfile
+**/Dockerfile
+
+# Ignore development files
+.replit
+replit.nix
+test-genesis.sh
+
+# Ignore Python virtual environments
+**/venv/
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+.Python
+
+# Ignore node_modules (will be rebuilt)
+**/node_modules/
+
+# Ignore Git and version control
+.git/
+.gitignore
+
+# Ignore documentation (not needed for deployment)
+*.md
+!frontend/README.md
+
+# Ignore scripts
+scripts/
+*.sh
+!frontend/**/*.sh
+
+# Ignore attached assets
+attached_assets/
+
+# Ignore render configs
+render*.yaml
+
+# Ignore other webapps
+portal-webapp/

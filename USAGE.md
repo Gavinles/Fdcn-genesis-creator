@@ -15,7 +15,9 @@ This will create:
 - `frontend/` - Next.js React application
 - `docker-compose.yml` - Container orchestration
 
-### Step 2: Deploy with Docker
+### Step 2: Deploy the Application
+
+**Option A: Local Development with Docker** (Quickest)
 
 ```bash
 # Modern Docker
@@ -25,9 +27,21 @@ docker compose up --build
 docker-compose up --build
 ```
 
+Open your browser to: http://localhost:3000
+
+**Option B: Cloud Deployment with Vercel** (Production)
+
+```bash
+# Interactive deployment helper
+./deploy-mindpath-vercel.sh
+```
+
+Or see [MINDPATH-VERCEL-DEPLOYMENT.md](./MINDPATH-VERCEL-DEPLOYMENT.md) for detailed cloud deployment instructions.
+
 ### Step 3: Access the Application
 
-Open your browser to: http://localhost:3000
+- **Local**: http://localhost:3000
+- **Production**: Your Vercel deployment URL
 
 Click "Begin Your Journey" to start using Mindpath.
 

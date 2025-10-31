@@ -59,6 +59,17 @@ backend/
 frontend/
 docker-compose.yml
 
+# Vercel
+.vercel
+*.vercel.json.backup
+
+# Environment files (keep .example files)
+.env
+.env.local
+.env.*.local
+!.env.example
+!*.env.example
+
 # Temporary files
 tmp/
 temp/

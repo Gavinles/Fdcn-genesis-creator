@@ -1,0 +1,15 @@
+services:
+  # Mindpath Backend - Flask + Flask-SocketIO
+  # This service handles WebSocket connections and sentiment analysis
+  - type: web
+    name: mindpath-backend
+    env: python
+    region: oregon
+    buildCommand: "cd backend && pip install -r requirements.txt && python -c 'import nltk; nltk.download(\"vader_lexicon\", quiet=True)'"
+    startCommand: "cd backend && python src/app.py"
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.9.0"
+      - key: PORT
+        value: "5008"
