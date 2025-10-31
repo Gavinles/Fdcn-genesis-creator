@@ -18,7 +18,7 @@ This repository contains a microservices-based application with the following co
 
 ## Technology Stack
 
-- **Backend Services**: Python 3.x, Flask, Flask-CORS, Gunicorn
+- **Backend Services**: Python 3.7+, Flask, Flask-CORS, Gunicorn
 - **NLP**: NLTK with VADER sentiment analyzer
 - **Frontend**: Next.js 13.x, React 18.x
 - **Deployment**: Render.com (configured via `render.yaml`)
@@ -74,8 +74,8 @@ This repository contains a microservices-based application with the following co
 
 #### Modifying Reward Calculations
 - Edit the PoCC calculation logic in `/services/oracle-ai/app.py`
-- FEX calculation: `max(1., len(text)/10.) * (1 + sentiment)`
-- SU calculation: `max(1, int(len(text)/20.)) * (1 + sentiment)`
+- FEX calculation: `max(1., len(text)/10.) * (1 + sentiment)` where `sentiment` is a float in range [-1.0, 1.0] from VADER compound score
+- SU calculation: `max(1, int(len(text)/20.)) * (1 + sentiment)` where `sentiment` is a float in range [-1.0, 1.0] from VADER compound score
 
 #### Updating Service Endpoints
 - Modify Flask routes in respective `app.py` files
@@ -101,7 +101,7 @@ The project is configured for Render.com deployment:
 2. **Error Handling**: Always handle service unavailability gracefully
 3. **CORS**: Ensure CORS is properly configured for all API endpoints
 4. **Environment Variables**: Use environment variables for service URLs and configuration
-5. **Sentiment Analysis**: Cache VADER lexicon to avoid repeated downloads
+5. **Sentiment Analysis**: Cache VADER lexicon by checking `nltk.data.find('sentiment/vader_lexicon.zip')` before downloading; this is already implemented in `sentiment_analyzer.py` and `oracle-ai/app.py`
 6. **State Management**: Ensure atomic updates to account state in the ledger
 7. **API Design**: Keep endpoints RESTful and return meaningful status codes
 
