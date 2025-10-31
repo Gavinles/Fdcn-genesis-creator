@@ -15,6 +15,8 @@ Mindpath is a full-stack application consisting of:
 
 ## Quick Start
 
+**⚡ In a hurry?** See [QUICKSTART.md](./QUICKSTART.md) for a 5-minute setup guide.
+
 ### Prerequisites
 
 - Docker and Docker Compose installed (for local deployment)
